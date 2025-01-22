@@ -10,5 +10,44 @@
 }
 
 body {
-    min-height: 100svh;
+    height: 100svh;
+    font-size: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+button:hover {
+    cursor: pointer;
+}
+
+/* Game board */
+
+.container.game-screen {
+    height: 100%;
+    display: grid;
+    justify-items: center;
+    align-items: center;
+    grid-template-rows: repeat(3, 1fr);
+    gap: 2rem;
+}
+
+.container.game-screen h1 {
+    align-self: end;
+}
+
+.board {
+    width: 400px;
+    height: 400px;
+    background-color: #000;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 0.25rem;
+}
+
+.tile {
+    font-size: 7rem;
+    background-color: #fff;
+    border: none;
 }

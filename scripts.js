@@ -81,5 +81,101 @@ function GameBoard() {
         return true;
     }
 
-    return { getPosition, getBoard, getEmptyPositions, placeMarker, printBoard};
+    return { getPosition, getBoard, getEmptyPositions, placeMarker, printBoard };
+}
+
+function GameController(playerOne = "Player One", playerTwo = "Player Two") {
+    let players = [Player(`${playerOne}`, "X"), Player(`${playerTwo}`, "O")];
+    let gameboard;
+    let gameOverState;
+    let winningTileSequence; // The tile sequence that triggered the win condition for a player (if it wasn't a tie)
+    let currentPlayer;
+    let tileWinCondition; // All winning tile-sequence combinations for game to end
+
+    const playRound = (row, col, marker) => {
+        if (!gameOverState) {
+            let successfulTurn = gameboard.placeMarker(row, col, marker);
+            if (successfulTurn) {
+                gameboard.printBoard();
+                gameOverState = isGameOver();
+                if (gameOverState) {
+                    console.log(gameOverState);
+                } else {
+                    changeCurrentPlayer();
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+
+    const checkTileSequence = () => {
+        for (let i = 0; i < tileWinCondition.length; i++) {
+            if (tileWinCondition[i].every(position => position.getValue() !== null)) {
+                let sequence = tileWinCondition[i];
+                if (sequence.every(tile => tile.getValue() === sequence[0].getValue())) {
+                    winningTileSequence = [...sequence];
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    const isGameOver = () => {
+        if (checkTileSequence()) {
+            return `${currentPlayer.getName()} (${currentPlayer.getMarker()}) is the winner!`;
+        }
+
+        if (gameboard.getEmptyPositions().length === 0) {
+            return `It's a tie!`;
+        }
+
+        return false;
+    }
+
+    const changeCurrentPlayer = () => {
+        currentPlayer = currentPlayer !== players[0] ? players[0] : players[1];
+    }
+
+    const newGame = () => {
+        gameboard = GameBoard();
+        gameOverState = false;
+        winningTileSequence = null;
+        currentPlayer = players[0];
+        tileWinCondition = [
+            // Horizontal-sequence
+            [gameboard.getPosition(0, 0), gameboard.getPosition(0, 1), gameboard.getPosition(0, 2)],
+            [gameboard.getPosition(1, 0), gameboard.getPosition(1, 1), gameboard.getPosition(1, 2)],
+            [gameboard.getPosition(2, 0), gameboard.getPosition(2, 1), gameboard.getPosition(2, 2)],
+
+            // Vertical-sequence
+            [gameboard.getPosition(0, 0), gameboard.getPosition(1, 0), gameboard.getPosition(2, 0)],
+            [gameboard.getPosition(0, 1), gameboard.getPosition(1, 1), gameboard.getPosition(2, 1)],
+            [gameboard.getPosition(0, 2), gameboard.getPosition(1, 2), gameboard.getPosition(2, 2)],
+
+            // Diagonal-sequence
+            [gameboard.getPosition(0, 0), gameboard.getPosition(1, 1), gameboard.getPosition(2, 2)],
+            [gameboard.getPosition(2, 0), gameboard.getPosition(1, 1), gameboard.getPosition(0, 2)]
+        ]
+    }
+
+    // To highlight the three-in-row sequence that ended the game onto the UI (if it wasn't a tie)
+    const getWinningTileSequence = () => {
+        if (gameOverState) {
+            if (winningTileSequence) {
+                return winningTileSequence;
+            }
+            return console.log("Game was tied, so there is no winning sequence.");
+        }
+        return console.log("Game has not finished.");
+    }
+
+    const getBoard = () => gameboard.getBoard();
+    const getCurrentPlayer = () => currentPlayer
+    const getGameOverState = () => gameOverState;
+
+    newGame();
+
+    return { newGame, playRound, getBoard, getCurrentPlayer, getGameOverState, getWinningTileSequence };
 }

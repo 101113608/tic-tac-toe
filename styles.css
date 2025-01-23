@@ -1,3 +1,9 @@
+/* CSS */
+@font-face {
+    font-family: 'take-coffee';
+    src: url("fonts/takecoffee-rpoa3-webfont.woff2");
+}
+
 *,
 *::before,
 *::after {
@@ -7,6 +13,7 @@
 * {
     margin: 0;
     padding: 0;
+    font-family: 'take-coffee', Arial, Helvetica, sans-serif;
 }
 
 body {

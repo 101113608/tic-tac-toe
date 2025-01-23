@@ -261,7 +261,7 @@ function ScreenController() {
 
     boardDiv.addEventListener("click", clickBoardTileHandler);
 
-    updateScreen();
+    // updateScreen();
 };
 
 ScreenController();

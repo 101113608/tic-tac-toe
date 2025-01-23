@@ -179,3 +179,89 @@ function GameController(playerOne = "Player One", playerTwo = "Player Two") {
 
     return { newGame, playRound, getBoard, getCurrentPlayer, getGameOverState, getWinningTileSequence };
 }
+
+function ScreenController() {
+    let gamecontroller = GameController();
+
+    const containerDiv = document.querySelector(".container");
+    const boardDiv = document.createElement("div");
+    const playerTurnDiv = document.createElement("h1");
+
+    playerTurnDiv.classList.add("turn");
+    boardDiv.classList.add("board");
+
+    const updateScreen = () => {
+        containerDiv.textContent = "";
+        boardDiv.textContent = "";
+
+        const board = gamecontroller.getBoard();
+        const currentPlayer = gamecontroller.getCurrentPlayer();
+
+        playerTurnDiv.textContent = `${currentPlayer.getName()}'s (${currentPlayer.getMarker()}) turn`;
+
+        board.forEach((row, rowIndex) => {
+            row.forEach((col, colIndex) => {
+                const tileDiv = document.createElement("button");
+
+                tileDiv.classList.add("tile");
+                tileDiv.dataset.row = `${rowIndex}`;
+                tileDiv.dataset.col = `${colIndex}`;
+
+                let tileValue = board[rowIndex][colIndex].getValue();
+                if (!tileValue) {
+                    tileValue = ``;
+                }
+                tileDiv.textContent = tileValue;
+
+                boardDiv.append(tileDiv);
+            })
+        });
+        containerDiv.append(playerTurnDiv, boardDiv);
+    }
+
+    const resultsScreen = () => {
+        const winningSequence = gamecontroller.getWinningTileSequence();
+
+        playerTurnDiv.textContent = gamecontroller.getGameOverState();
+
+        // Highlight tiles of the three-tile-sequence
+        if (!(gamecontroller.getGameOverState().includes("tie"))) {
+            winningSequence.forEach(tile => {
+                let tileDiv = document.querySelector(`[data-row="${tile.getRow()}"][data-col="${tile.getCol()}"]`);
+                tileDiv.classList.add("highlight-bg");
+            })
+        }
+    }
+
+    function clickBoardTileHandler(event) {
+        const selectedTile = {
+            row: event.target.dataset.row,
+            col: event.target.dataset.col,
+        }
+
+        // Invalid tile
+        if (Object.values(selectedTile).some(key => key === null || key === "" || key === undefined)) {
+            return;
+        }
+
+        const validRound = gamecontroller.playRound(
+            selectedTile.row,
+            selectedTile.col,
+            gamecontroller.getCurrentPlayer().getMarker()
+        );
+
+        if (validRound) {
+            updateScreen();
+            const gameOverState = gamecontroller.getGameOverState();
+            if (gameOverState) {
+                resultsScreen();
+            }
+        }
+    }
+
+    boardDiv.addEventListener("click", clickBoardTileHandler);
+
+    updateScreen();
+};
+
+ScreenController();

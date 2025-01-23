@@ -9,7 +9,20 @@
 </head>
 
 <body>
-    <div class="container game-screen">
+    <div class="container start-screen">
+        <img src="images/splash-screen.png" alt="Splash Screen">
+        <h1 class="start-screen-title">Tic Tac Toe</h1>
+        <form action="/" method="dialog" id="startScreen">
+            <div class="player-name-section">
+                <label for="playerOne">Player 1</label>
+                <input type="text" name="playerOne" id="playerOne" value="Player 1" required>
+            </div>
+            <div class="player-name-section">
+                <label for="playerTwo">Player 2</label>
+                <input type="text" name="playerTwo" id="playerTwo" value="Player 2" required>
+            </div>
+            <button type="submit">Play</button>
+        </form>
     </div>
     <script src="scripts.js"></script>
 </body>

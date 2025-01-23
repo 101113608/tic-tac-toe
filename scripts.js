@@ -272,7 +272,7 @@ function ScreenController() {
     containerDiv.addEventListener("click", clickPlayAgainHandler);
     boardDiv.addEventListener("click", clickBoardTileHandler);
 
-    updateScreen();
+    // updateScreen();
 };
 
 ScreenController();

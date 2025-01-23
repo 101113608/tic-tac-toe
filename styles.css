@@ -82,3 +82,55 @@ button:not(.tile):hover {
 .tile.highlight-bg {
     background-color: #90ee90;
 }
+
+/* Start Screen */
+
+.container.start-screen {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+}
+
+.container.start-screen h1 {
+    font-size: 4rem;
+    justify-self: center;
+    align-self: end;
+}
+
+.container.start-screen img {
+    grid-row: span 2;
+    margin-right: 2rem;
+}
+
+#startScreen {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    align-items: center;
+}
+
+.player-name-section {
+    grid-column: span 2;
+    display: grid;
+    grid-template-columns: subgrid;
+    align-items: center;
+    gap: 1rem;
+}
+
+.player-name-section input {
+    font-size: 1.25rem;
+    padding: 0.25rem;
+}
+
+#startScreen button {
+    grid-column: span 2;
+    justify-self: center;
+}
+
+img {
+    pointer-events: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}

@@ -58,3 +58,7 @@ button:hover {
     background-color: #fff;
     border: none;
 }
+
+.tile.highlight-bg {
+    background-color: #90ee90;
+}

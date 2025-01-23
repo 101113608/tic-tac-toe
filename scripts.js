@@ -220,17 +220,20 @@ function ScreenController() {
     }
 
     const resultsScreen = () => {
+        const playAgainBtn = document.createElement("button");
         const winningSequence = gamecontroller.getWinningTileSequence();
 
+        playAgainBtn.textContent = "Play Again";
         playerTurnDiv.textContent = gamecontroller.getGameOverState();
 
-        // Highlight tiles of the three-tile-sequence
+        playAgainBtn.classList.add("restart");
         if (!(gamecontroller.getGameOverState().includes("tie"))) {
             winningSequence.forEach(tile => {
                 let tileDiv = document.querySelector(`[data-row="${tile.getRow()}"][data-col="${tile.getCol()}"]`);
                 tileDiv.classList.add("highlight-bg");
             })
         }
+        containerDiv.append(playAgainBtn);
     }
 
     function clickBoardTileHandler(event) {
@@ -259,9 +262,17 @@ function ScreenController() {
         }
     }
 
+    function clickPlayAgainHandler(event) {
+        if (event.target.classList.contains("restart")) {
+            gamecontroller.newGame();
+            updateScreen();
+        }
+    }
+
+    containerDiv.addEventListener("click", clickPlayAgainHandler);
     boardDiv.addEventListener("click", clickBoardTileHandler);
 
-    // updateScreen();
+    updateScreen();
 };
 
 ScreenController();

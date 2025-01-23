@@ -181,9 +181,10 @@ function GameController(playerOne = "Player One", playerTwo = "Player Two") {
 }
 
 function ScreenController() {
-    let gamecontroller = GameController();
+    let gamecontroller;
 
     const containerDiv = document.querySelector(".container");
+    const playerNamesForm = document.querySelector("#startScreen");
     const boardDiv = document.createElement("div");
     const playerTurnDiv = document.createElement("h1");
 
@@ -236,6 +237,13 @@ function ScreenController() {
         containerDiv.append(playAgainBtn);
     }
 
+    const extractPlayerNames = () => {
+        const nameData = new FormData(playerNamesForm);
+        const playerNames = [];
+        nameData.forEach(name => playerNames.push(name));
+        return playerNames;
+    }
+
     function clickBoardTileHandler(event) {
         const selectedTile = {
             row: event.target.dataset.row,
@@ -269,10 +277,23 @@ function ScreenController() {
         }
     }
 
+    function submitPlayerNamesHandler(event) {
+        if (event.type === "submit") {
+            event.preventDefault();
+
+            const playerNames = extractPlayerNames();
+            gamecontroller = GameController(playerNames[0], playerNames[1]);
+
+            containerDiv.classList.remove("start-screen");
+            containerDiv.classList.add("game-screen");
+
+            updateScreen();
+        }
+    }
+
     containerDiv.addEventListener("click", clickPlayAgainHandler);
     boardDiv.addEventListener("click", clickBoardTileHandler);
-
-    // updateScreen();
+    playerNamesForm.addEventListener("submit", submitPlayerNamesHandler);
 };
 
 ScreenController();
